@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemistry Space Invaders - Periodic Table Edition</title>
+  <meta name="description" content="Retro 1980s Space Invaders arcade game for school chemistry exhibition. Explore the Periodic Table in a fun, beginner-friendly game!">
+  <!-- Google Fonts for Retro Arcade Style -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Retro CRT Scanline Filter Overlay -->
+  <div class="crt-overlay"></div>
+
+  <!-- Main Arcade Cabinet Container -->
+  <div id="game-cabinet">
+
+    <!-- Top Header & Banner -->
+    <header class="arcade-header">
+      <div class="header-left">
+        <span class="exhibition-tag">🧪 SCHOOL CHEMISTRY EXHIBITION 🧪</span>
+      </div>
+      <div class="header-center">
+        <h1 class="game-title">CHEMISTRY SPACE INVADERS</h1>
+        <div class="game-subtitle">PERIODIC TABLE EDITION</div>
+      </div>
+      <div class="header-right">
+        <button id="sound-btn" class="icon-btn" title="Toggle Sound">🔊 SOUND: ON</button>
+        <button id="help-btn" class="icon-btn" title="How to Play">❓ HELP</button>
+      </div>
+    </header>
+
+    <!-- Game HUD Bar -->
+    <div id="hud-bar" class="hud-bar hidden">
+      <div class="hud-item">
+        <span class="hud-label">LEVEL:</span>
+        <span id="hud-level" class="hud-val">1 - SYMBOLS</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">PROGRESS:</span>
+        <span id="hud-progress" class="hud-val">QUESTION 1 / 5</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">SCORE:</span>
+        <span id="hud-score" class="hud-val">0000</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">LIVES:</span>
+        <span id="hud-lives" class="hud-val">❤️❤️❤️</span>
+      </div>
+    </div>
+
+    <!-- Question Banner -->
+    <div id="question-banner" class="question-banner hidden">
+      <div id="question-text" class="question-text">Target: Select the correct chemical symbol for Hydrogen</div>
+    </div>
+
+    <!-- Canvas Game Display -->
+    <div id="canvas-container">
+      <canvas id="game-canvas" width="800" height="480"></canvas>
+      
+      <!-- Overlay Screen: Start Screen (Full 1980s Arcade Intro) -->
+      <div id="screen-title" class="overlay-screen active">
+        <div class="retro-intro-container">
+          <!-- Top Arcade Score Ticker -->
+          <div class="arcade-score-ticker">
+            <span>1UP <span class="neon-yellow">0000</span></span>
+            <span>HIGH SCORE <span class="neon-green">2000</span></span>
+            <span>2UP <span class="neon-yellow">0000</span></span>
+          </div>
+
+          <!-- Chrome & Neon Arcade Title Header -->
+          <div class="retro-title-wrapper">
+            <div class="retro-top-tag">★ SCHOOL CHEMISTRY EXHIBITION ★</div>
+            <h1 class="retro-title-main">CHEMISTRY</h1>
+            <h2 class="retro-title-sub">SPACE INVADERS</h2>
+            <div class="retro-subtitle-badge">★ PERIODIC TABLE EDITION ★</div>
+          </div>
+
+          <!-- Animated Element Badge Grid -->
+          <div class="element-grid-logo">
+            <div class="element-badge-retro">
+              <span class="num">1</span>
+              <span class="sym">H</span>
+              <span class="name">HYDROGEN</span>
+            </div>
+            <div class="element-badge-retro pink">
+              <span class="num">2</span>
+              <span class="sym">He</span>
+              <span class="name">HELIUM</span>
+            </div>
+            <div class="element-badge-retro gold">
+              <span class="num">6</span>
+              <span class="sym">C</span>
+              <span class="name">CARBON</span>
+            </div>
+            <div class="element-badge-retro cyan">
+              <span class="num">8</span>
+              <span class="sym">O</span>
+              <span class="name">OXYGEN</span>
+            </div>
+            <div class="element-badge-retro green">
+              <span class="num">79</span>
+              <span class="sym">Au</span>
+              <span class="name">GOLD</span>
+            </div>
+          </div>
+
+          <!-- Retro Arcade Marquee & Prompt -->
+          <div class="retro-coin-prompt blink-text">
+            ► PRESS START TO PLAY ◄
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="title-buttons-retro">
+            <button id="start-btn" class="btn-arcade-start">
+              <span class="btn-icon">🕹️</span>
+              <span class="btn-text">INSERT COIN / PLAY GAME</span>
+            </button>
+            <div class="secondary-btn-row">
+              <button id="how-to-btn" class="btn btn-secondary">📖 HOW TO PLAY</button>
+              <button id="scores-btn" class="btn btn-secondary">🏆 LEADERBOARD</button>
+            </div>
+          </div>
+
+          <!-- Arcade Bottom Footer & Credits -->
+          <div class="retro-arcade-credits">
+            <span>CREDIT 01</span> • <span>FREE PLAY EXHIBITION MODE</span> • <span>ALL AGES WELCOME</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay Screen: How to Play -->
+      <div id="screen-help" class="overlay-screen hidden">
+        <div class="modal-card">
+          <h2 class="card-title">📖 HOW TO PLAY</h2>
+          <div class="instructions-grid">
+            <div class="instruct-item">
+              <div class="instruct-icon">🕹️</div>
+              <div class="instruct-text">
+                <strong>MOVE YOUR SHIP:</strong>
+                Use <strong>Left / Right Arrow keys</strong>, <strong>A / D keys</strong>, move your <strong>Mouse</strong>, or press the <strong>On-Screen Buttons</strong>.
+              </div>
+            </div>
+            <div class="instruct-item">
+              <div class="instruct-icon">💥</div>
+              <div class="instruct-text">
+                <strong>SHOOT ANSWERS & ENEMIES:</strong>
+                Press <strong>SPACEBAR</strong>, <strong>Click Mouse</strong>, or tap <strong>FIRE</strong> to shoot twin lasers! Hit the correct chemical answer (+100 PTS) or <strong>blast enemy drones (+25 PTS)</strong>!
+              </div>
+            </div>
+            <div class="instruct-item">
+              <div class="instruct-icon">⚠️</div>
+              <div class="instruct-text">
+                <strong>DODGE HAZARD ENEMIES:</strong>
+                Watch out for red enemy scout drones and spinning space meteors while aiming for answers. Don't let them crash into your ship!
+              </div>
+            </div>
+            <div class="instruct-item">
+              <div class="instruct-icon">🧪</div>
+              <div class="instruct-text">
+                <strong>PERIODIC TABLE MISSIONS:</strong>
+                Complete 4 levels of Periodic Table questions. Every game features different randomized questions & option layouts!
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="close-help-btn" class="btn btn-primary">GOT IT! LET'S PLAY 🚀</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay Screen: High Scores -->
+      <div id="screen-scores" class="overlay-screen hidden">
+        <div class="modal-card">
+          <h2 class="card-title">🏆 EXHIBITION HIGH SCORES</h2>
+          <div id="leaderboard-list" class="leaderboard-list">
+            <!-- Populated dynamically -->
+          </div>
+          <div class="modal-footer">
+            <button id="close-scores-btn" class="btn btn-secondary">BACK TO MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay Screen: Educational Fact Modal -->
+      <div id="screen-fact" class="overlay-screen hidden">
+        <div id="fact-card" class="modal-card fact-card">
+          <div id="fact-status" class="fact-status correct">CORRECT! 🎉</div>
+          <h3 id="fact-title" class="fact-title">Periodic Table Fun Fact</h3>
+          <p id="fact-text" class="fact-text">H₂O is water — made of 2 Hydrogen atoms and 1 Oxygen atom.</p>
+          <div class="fact-action">
+            <button id="next-q-btn" class="btn btn-primary btn-large">NEXT QUESTION ➔</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay Screen: Mission Complete / Victory -->
+      <div id="screen-victory" class="overlay-screen hidden">
+        <div class="modal-card victory-card">
+          <div class="victory-icon">🏅</div>
+          <h2 class="card-title neon-gold">CHEMISTRY MISSION COMPLETE!</h2>
+          <p class="victory-sub">Great job! You just explored some basic chemistry.</p>
+
+          <div class="score-summary">
+            <div class="summary-box">
+              <span class="summary-label">FINAL SCORE</span>
+              <span id="final-score" class="summary-val">2000</span>
+            </div>
+            <div class="summary-box">
+              <span class="summary-label">RANK AWARDED</span>
+              <span id="final-rank" class="summary-val">MASTER CHEMIST</span>
+            </div>
+          </div>
+
+          <div class="name-entry-form">
+            <label for="player-name">ENTER YOUR NAME FOR LEADERBOARD:</label>
+            <div class="input-group">
+              <input type="text" id="player-name" maxlength="12" placeholder="Parent / Guest" value="Guest Chemist">
+              <button id="save-score-btn" class="btn btn-primary">SAVE SCORE</button>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button id="restart-btn" class="btn btn-secondary btn-large">🔄 PLAY AGAIN</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay Screen: Game Over -->
+      <div id="screen-gameover" class="overlay-screen hidden">
+        <div class="modal-card gameover-card">
+          <h2 class="card-title neon-red">MISSION FAILED</h2>
+          <p class="gameover-sub">Don't worry! Chemistry is all about learning through trial and discovery.</p>
+
+          <div class="score-summary">
+            <div class="summary-box">
+              <span class="summary-label">SCORE</span>
+              <span id="gameover-score" class="summary-val">300</span>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button id="retry-btn" class="btn btn-primary btn-large">TRY AGAIN 🚀</button>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- End canvas container -->
+
+    <!-- Bottom Fact & Correct Answer Screen (Full Width) -->
+    <div id="bottom-fact-panel" class="bottom-fact-panel">
+      <div id="bottom-status" class="bottom-status">⚡ AIM & SHOOT LASERS AT ANSWERS ⚡</div>
+      <div id="bottom-fact-text" class="bottom-fact-text">Use Arrow Keys / Mouse to move • Press Space / Click to shoot!</div>
+    </div>
+
+    <!-- Footer Information -->
+    <footer class="arcade-footer">
+      <span>Controls: Arrow Keys / A-D to Move • SPACE / Click to Fire Laser</span>
+      <span class="version-tag">School Chemistry Exhibition • Periodic Table Invaders</span>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript App Modules -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
